@@ -1,43 +1,35 @@
 import React, {useState} from "react";
-
 import {useHistory} from "react-router-dom";
-
-import {login} from "../Api" ;
-
-import {IonAlert, IonContent, IonInput, IonItem, IonLabel, IonNote, IonPage, useIonLoading} from "@ionic/react";
-import {LoginData} from "../interfaces" ;
-import {stat} from "fs";
-
+import {login, updateUser} from "../Api"   ;
+import {IonAlert, IonInput, IonItem, IonLabel, IonNote} from "@ionic/react";
+import {LoginData, RegisterData} from "../interfaces" ;
 
 type  StateType = {
     id: number;
-    status: boolean;
-
+    status: boolean
 }
 
 const LogInForms: React.FC = () => {
 
+    let history = useHistory();
 
     const [showAlert, setShowAlert] = useState(false);
-
-
     const [isSubmitted, setIsSubmitted] = useState(false);
-
-
+    const [isTouched, setIsTouched] = useState(false);
+    const [isValid, setIsValid] = useState<boolean>();
+    const [activo, setActivo] = useState<RegisterData>({
+        status: true,
+    });
     const [formData, setFormData] = useState<LoginData>({
         correo: "", pass: ""
     });
 
-    let history = useHistory();
-
-
-    const [isTouched, setIsTouched] = useState(false);
-    const [isValid, setIsValid] = useState<boolean>();
     const validateEmail = (email: string) => {
         return email.match(
             /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
         );
     };
+
     const validate = (ev: Event) => {
         const value = (ev.target as HTMLInputElement).value;
         setIsValid(undefined);
@@ -49,51 +41,36 @@ const LogInForms: React.FC = () => {
         setIsTouched(true);
     };
 
-
     const handleSubmit = async (event: any) => {
-
         event.preventDefault();
-
-
         const data = await login(formData);
-        if (data) {
 
-            const activo: boolean = data.data.data.status
-            console.log(activo)
-            const state: StateType = {id: data.data.data.user_id, status: activo};
+        if (data) {
+            setActivo({status: true});
+            await updateUser(data.data.data.user_id, activo)
+            const state: StateType = {id: data.data.data.user_id, status: true};
             history.push({
                 pathname: '/chat-online/',
                 state: state
             });
             localStorage.setItem("token", data.data.token)
-
             setFormData({correo: '', pass: ''})
-
         }
-
-
     }
 
-
     return (<>
-
-
-        <div className={"flex  w-full h-screen"}>
-            <div className={"w-full flex  items-center justify-center lg:w-1/2  "}>
-
+        <div className={"flex w-full h-screen"}>
+            <div className={"w-full flex items-center justify-center lg:w-1/2"}>
                 <div
-                    className='w-11/12      max-w-[600px]   px-10 py-20 rounded-3xl bg-white border-2 border-gray-100 max-sm:border-0'>
+                    className='w-11/12 max-w-[600px] px-10 py-20 rounded-3xl bg-white border-2 border-gray-100 max-sm:border-0'>
                     <div className='mt-8'>
-                        <div className={"pb-10 "}>
-
-                            <h1 className={"text-4xl   text-center font-bold"}> Welcome </h1>
-                            <h2 className={"text-center  text-lg  "}>Enter your credentials </h2>
+                        <div className={"pb-10"}>
+                            <h1 className={"text-4xl text-center font-bold"}>Welcome</h1>
+                            <h2 className={"text-center text-lg"}>Enter your credentials</h2>
                         </div>
-
-
                         <div className='flex flex-col'>
                             <IonItem
-                                className={`${isValid && 'ion-valid'}  ${isValid === false && 'ion-invalid'}  ${isTouched && 'ion-touched'}`}>
+                                className={`${isValid && 'ion-valid'} ${isValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}>
                                 <IonLabel position={"floating"}> Email </IonLabel>
                                 <IonInput type="email" maxlength={25} onIonInput={(event) => validate(event)}
                                           onIonBlur={() => markTouched()} value={formData.correo}
@@ -101,30 +78,26 @@ const LogInForms: React.FC = () => {
                                               ...formData,
                                               correo: event.detail.value != undefined ? event.detail.value : ""
                                           })}></IonInput>
-                                <IonNote slot="helper">Enter a valid email </IonNote>
+                                <IonNote slot="helper">Enter a valid email</IonNote>
                                 {isSubmitted && formData.correo.trim() === "" &&
-                                    <IonNote slot="error">Invalid email </IonNote>
+                                    <IonNote slot="error">Invalid email</IonNote>
                                 }
                             </IonItem>
                         </div>
                         <div className='flex flex-col mt-4'>
                             <IonItem>
-                                <IonLabel position={"floating"}>Password </IonLabel>
-
+                                <IonLabel position={"floating"}>Password</IonLabel>
                                 <IonInput type="password" value={formData.pass} onIonChange={(event) => setFormData({
                                     ...formData,
                                     pass: event.detail.value != undefined ? event.detail.value : ""
-                                })}> </IonInput>
-                                <IonNote slot="helper"> Enter your password </IonNote>
+                                })}></IonInput>
+                                <IonNote slot="helper">Enter your password</IonNote>
                             </IonItem>
                         </div>
-
-
-                        <div className='mt-8 flex flex-col   gap-y-4'>
+                        <div className='mt-8 flex flex-col gap-y-4'>
                             <button onClick={(event) => handleSubmit(event)}
-                                    className='active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01]  ease-in-out   transform py-4   bg-gradient-to-r from-cyan-500 to-blue-500  rounded-xl text-white font-bold text-lg'>Sign
+                                    className='active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out transform py-4 bg-gradient-to-r from-red-500 to-red-500 rounded-xl text-white font-bold text-lg'>Sign
                                 in
-
                                 <IonAlert
                                     isOpen={showAlert}
                                     onDidDismiss={() => setShowAlert(false)}
@@ -134,9 +107,9 @@ const LogInForms: React.FC = () => {
                                 />
                             </button>
                         </div>
-                        <div className={"mt-3  flex flex-col   gap-y-4"}>
+                        <div className={"mt-3 flex flex-col gap-y-4"}>
                             <button
-                                className='flex items-center justify-center gap-2 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01]  ease-in-out transform py-4  rounded-xl text-gray-700 font-semibold text-lg border-2 border-gray-100  bg-gray-50  '>
+                                className='flex items-center justify-center gap-2 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out transform py-4 rounded-xl text-gray-700 font-semibold text-lg border-2 border-gray-100 bg-gray-50'>
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -155,28 +128,21 @@ const LogInForms: React.FC = () => {
                                 Google
                             </button>
                         </div>
-                        <div className='mt-8 flex  justify-center items-center'>
-                            <p className='font-medium text-base'> Don't have an account ? </p>
+                        <div className='mt-8 flex justify-center items-center'>
+                            <p className='font-medium text-base'>Don't have an account ?</p>
                             <a href="/register">
                                 <button
-                                    className='ml-2 font-medium text-base text-violet-500'> Sign up
+                                    className='ml-2 font-medium text-base text-violet-500'>Sign up
                                 </button>
-
-
                             </a>
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
             <div
-                className={"hidden  lg:flex h-full bg-no-repeat bg-[length:700px_700px] bg-center  w-1/2  items-center  justify-center bg-[url('/public/assets/img_login.svg')]"}>
-
+                className={"hidden lg:flex h-full bg-no-repeat bg-[length:700px_700px] bg-center w-1/2 items-center justify-center bg-[url('/public/assets/img_login.svg')]"}>
             </div>
         </div>
-
     </>);
 };
 

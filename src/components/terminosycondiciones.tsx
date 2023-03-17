@@ -1,18 +1,12 @@
 import React from 'react';
-import {IonContent, IonHeader, IonPage, IonTitle, IonToolbar} from "@ionic/react";
 
 const Terminosycondiciones = () => {
     return (
         <>
-
-
             <div>
-
                 <div>
-
-                    <h1> Introducción </h1>
+                    <h1>Introducción</h1>
                     <br/>
-
                     <p>
                         Estos términos y condiciones rigen su uso de nuestro sitio web y su relación con nosotros.
                         Al utilizar nuestro sitio web, acepta estar legalmente obligado por estos términos y
@@ -30,12 +24,10 @@ const Terminosycondiciones = () => {
                         obtener una cuenta. Usted es responsable de mantener la confidencialidad de su información
                         de cuenta y de todas las actividades que ocurran en su cuenta. No permita que otra persona
                         utilice su cuenta y notifíquenos inmediatamente si sospecha de un uso no autorizado de su
-                        cuenta .
-
+                        cuenta.
                     </p>
                     <br/>
-
-                    <h1> Co mpra de productos </h1>
+                    <h1>Co mpra de productos</h1>
                     El sitio web permite la compra de productos. Al realizar una compra, usted acepta pagar el
                     precio de compra y cualquier costo adicional asociado, incluidos los impuestos y los gastos
                     de envío. Haremos todo lo posible para que su pedido se entregue lo antes posible, pero no
@@ -71,12 +63,8 @@ const Terminosycondiciones = () => {
                     Cualquier disputa relacionada con estos términos y condiciones será resuelta por los
                     tribunales del [país].
                 </div>
-
             </div>
-
-
         </>
-
     );
 };
 

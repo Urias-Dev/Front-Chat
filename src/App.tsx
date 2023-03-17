@@ -2,7 +2,6 @@ import {Redirect, Route} from 'react-router-dom';
 import {IonApp, IonRouterOutlet, setupIonicReact} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 
-
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -26,34 +25,25 @@ import Register from "./pages/Register" ;
 import Menu from "./pages/Menu";
 import Conversation from "./components/Conversation";
 
-
 setupIonicReact();
 
 const App: React.FC = () => (
-       <IonApp>
-
-
-           <IonReactRouter>
-               <IonRouterOutlet>
-                <Route exact path="/login"    component ={LogIn   }   >
-                  </Route>
-                   <Route  exact path="/register"      component={Register} >
-
-                   </Route >
-
-                   <Route  exact  path ="/chat-online"   component={Menu}    >
-                    </Route>
-                       <Route   exact   path  =  "/chat"   component={ Conversation} >
-
-                      </Route>
-
-                 <Route  exact path="/"   >
+    <IonApp>
+        <IonReactRouter>
+            <IonRouterOutlet>
+                <Route exact path="/login" component={LogIn}>
+                </Route>
+                <Route exact path="/register" component={Register}>
+                </Route>
+                <Route exact path="/chat-online" component={Menu}>
+                </Route>
+                <Route exact path="/chat" component={Conversation}>
+                </Route>
+                <Route exact path="/">
                     <Redirect to="/login"/>
-                 </Route >
-
-               </IonRouterOutlet>
+                </Route>
+            </IonRouterOutlet>
         </IonReactRouter>
     </IonApp>
 );
-
 export default App;

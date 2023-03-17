@@ -1,235 +1,141 @@
 import React, {useEffect, useState} from 'react' ;
-
-
 import avatar from '../assets/img/avatar.png'
 import {io} from 'socket.io-client'
-
 import {
     IonFooter,
     IonAvatar,
-    IonButtons, IonCol,
+    IonButtons,
+    IonCol,
     IonContent,
     IonGrid,
-    IonHeader, IonRow,
-
+    IonHeader,
+    IonRow,
     IonTitle,
     IonToolbar,
-    IonBackButton, IonInput, IonButton, IonIcon, IonPage, IonTextarea, IonFabButton
+    IonBackButton,
+    IonInput,
+    IonIcon,
+    IonPage,
+    IonFabButton,
 } from "@ionic/react";
+
+
 import {sendOutline} from "ionicons/icons" ;
 import {Message} from "../interfaces"  ;
-import {RouteComponentProps, useHistory, useLocation} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import {findChat, getChatId, sendMessage} from "../Api";
-
 
 type  StateType = {
     name: string;
     id1: number;
     id2: number;
-
 }
-
 
 const Conversation: React.FC = () => {
 
+    const socket = io('http://localhost:3000');
 
     const location = useLocation<StateType>();
     const name = location.state?.name;
     const id1 = location.state?.id1;
     const id2 = location.state?.id2;
 
-
-    const socket = io('http://192.168.1.108:3000'
-    )
-
-
-    const [messages, setMessages] = useState<Message     [   ]>([]);
-    const [message, setMessage] = useState(" ")
-    const [items, setItems] = useState(0);
-
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [message, setMessage] = useState("")
+    const [fecha, setFecha] = useState("")
 
     const datos = async () => {
 
-
-        let id_cond: number;
-
-
-        findChat(id1, id2).then(responze => {
-
-            setMessages(responze.data)
-
-
+        findChat(id1, id2).then(response => {
+            setMessages(response.data)
         })
-
-
     }
 
-
     useEffect(() => {
-
-
         datos();
-
-
         const receiveMessage = (message: Message) => {
-
-
-            findChat(id1, id2).then(responze => {
-                setMessages([message, ...responze.data])
-
-
+            findChat(id1, id2).then(response => {
+                setMessages([...response.data])
             })
-
-
         };
 
-
         socket.on('message', receiveMessage)
-
 
         return () => {
             socket.off('message', receiveMessage)
             socket.off('disconnect')
         }
 
-
     }, [])
-
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
-
-
         const currentDate = new Date();
-
         const currentDateFormatted = currentDate.toLocaleDateString('en-US');
-
-
         const ChatId = await getChatId(id1, id2)
 
-        console.log(ChatId)
-
-
         const newMessage: Message = {
-
-
             contenido: message,
             id_usuario_env: id1,
             id_conversacion: ChatId,
-
             fecha: currentDateFormatted
-
-
         }
-
-
         sendMessage(newMessage).then(response => {
-
-                console.log(response.data)
-
-
-                socket.emit("message", newMessage.contenido)
+                socket.emit('message', newMessage.contenido)
                 setMessage("")
             }
         )
-
-
     }
-
-
-    return (< >
-
+    return (<>
             <IonPage>
-
                 <IonHeader>
-                    <IonToolbar color={"primary"}>
+                    <IonToolbar color={"danger"}>
                         <IonButtons slot="start">
-
-
                             <IonBackButton defaultHref={"/chat-online/"}/>
-
-
                         </IonButtons>
-
-
                         <IonAvatar slot={"start"}>
-                            <img className={"p-2 "} src={avatar} alt=""/>
+                            <img className={"p-2"} src={avatar} alt=""/>
                         </IonAvatar>
-
                         <div>
-                            <IonTitle>     {name}       </IonTitle>
-                            <h2 className=" ml-5"> Online </h2>
+                            <IonTitle>{name}</IonTitle>
+                            <h2 className="ml-5"> Online </h2>
                         </div>
                     </IonToolbar>
-
                 </IonHeader>
-
-                <IonContent scrollEvents={true}>
-
-
+                <IonContent scrollEvents={true} color={"light"}>
                     <IonGrid>
-
-
                         {messages.map((object, index) => (
-
-
                             <IonRow key={index}>
-
-                                <IonCol size={"8 "} offset={object.id_usuario_env === id1 ? "4" : "0 "}
-                                        className={`p-2    border rounded-2xl       ${object.id_usuario_env === id1 ? " bg-gradient-to-r   from-cyan-500 to-blue-500  mt-4  whitespace-pre-wrap   text-white " : " bg-gradient-to-r  from-emerald-500 to-emerald-500  mt-4  whitespace-pre-wrap   text-white "} `}>
-
-
-                                    <div className={"  flex   justify-start   "}>
-                                        <span>{object.contenido}  </span>
+                                <IonCol size={"8"} offset={object.id_usuario_env === id1 ? "4" : "0"}
+                                        className={`p-2 border rounded-2xl ${object.id_usuario_env === id1 ? "bg-gradient-to-r from-orange-500 to-green-500 mt-4 whitespace-pre-wrap text-white" : "bg-gradient-to-r from-pink-500 to-purple-500 mt-4 whitespace-pre-wrap text-white"}`}>
+                                    <div className={"flex justify-start"}>
+                                        <span>{object.contenido}</span>
                                     </div>
-                                    <div className={"flex justify-end "}><br/>
-                                        <span>   {object.fecha}  </span>
+                                    <div className={"flex justify-end"}><br/>
+                                        <span>{object.fecha}</span>
                                     </div>
-
-
                                 </IonCol>
-
-
                             </IonRow>
                         ))}
-
-
                     </IonGrid>
-
-
                 </IonContent>
-
-
-                <IonFooter class={"ion-no-border   m-1"}>
+                <IonFooter class={"ion-no-border"} color={"light"}>
                     <form onSubmit={handleSubmit}>
-
-                        <IonToolbar>
-
-
-                            <IonInput type={"text"} name={"message"}
-                                      className={"border border-cyan-600     rounded-full  "}
+                        <IonToolbar color={"light"}>
+                            <IonInput name={"message"}
+                                      className={"border border-red-500 rounded-full"}
                                       value={message}
-                                      onIonChange={(event) => setMessage(event.detail.value != undefined ? event.detail.value : " ")}
-                                      placeholder={"message"} class={"ion-text-center"} required> </IonInput>
-
-
+                                      onIonChange={(event) => setMessage(event.detail.value != undefined ? event.detail.value : "")}
+                                      placeholder="message" class={"ion-text-center"}></IonInput>
                             <button slot={"end"} type={"submit"} onClick={(e) => handleSubmit(e)}>
-                                <IonFabButton size={"small"} color={"primary"}>
+                                <IonFabButton size={"small"} color={"danger"}>
                                     <IonIcon icon={sendOutline}></IonIcon>
                                 </IonFabButton>
-
-
                             </button>
-
-
                         </IonToolbar>
                     </form>
                 </IonFooter>
-
-
             </IonPage>
-
-
         </>
     );
 };
