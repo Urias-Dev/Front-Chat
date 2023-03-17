@@ -21,7 +21,7 @@ import {
 
 
 import {sendOutline} from "ionicons/icons" ;
-import {Message} from "../interfaces"  ;
+import {Message} from "../interfaces"   ;
 import {useLocation} from 'react-router-dom';
 import {findChat, getChatId, sendMessage} from "../Api";
 
@@ -33,7 +33,7 @@ type  StateType = {
 
 const Conversation: React.FC = () => {
 
-    const socket = io('http://localhost:3000');
+    const socket = io('http://localhost:3000') ;
 
     const location = useLocation<StateType>();
     const name = location.state?.name;
