@@ -19,7 +19,6 @@ import {
     IonFabButton,
 } from "@ionic/react";
 
-
 import {sendOutline} from "ionicons/icons" ;
 import {Message} from "../interfaces"   ;
 import {useLocation} from 'react-router-dom';
@@ -42,7 +41,6 @@ const Conversation: React.FC = () => {
 
     const [messages, setMessages] = useState<Message[]>([]);
     const [message, setMessage] = useState("")
-    const [fecha, setFecha] = useState("")
 
     const datos = async () => {
 
@@ -128,7 +126,7 @@ const Conversation: React.FC = () => {
                                       onIonChange={(event) => setMessage(event.detail.value != undefined ? event.detail.value : "")}
                                       placeholder="message" class={"ion-text-center"}></IonInput>
                             <button slot={"end"} type={"submit"} onClick={(e) => handleSubmit(e)}>
-                                <IonFabButton size={"small"} color={"danger"}>
+                                 <IonFabButton size={"small"} color={"danger"}>
                                     <IonIcon icon={sendOutline}></IonIcon>
                                 </IonFabButton>
                             </button>
