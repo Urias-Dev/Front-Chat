@@ -8,7 +8,7 @@ import {
 const LogIn: React.FC = () => {
     return (
         <IonPage>
-            <IonContent>
+             <IonContent>
                 <LogInForms/>
             </IonContent>
         </IonPage>

@@ -27,31 +27,36 @@ import {findChat, getChatId, sendMessage} from "../Api";
 type  StateType = {
     name: string;
     id1: number;
-    id2: number;
+    id2: number
+    status: boolean
 }
 
 const Conversation: React.FC = () => {
 
-    const socket = io('http://localhost:3000') ;
+    const socket = io('http://localhost:3000');
 
     const location = useLocation<StateType>();
     const name = location.state?.name;
     const id1 = location.state?.id1;
     const id2 = location.state?.id2;
+    const status = location.state?.status
 
     const [messages, setMessages] = useState<Message[]>([]);
     const [message, setMessage] = useState("")
+    const [chatid, setChatid] = useState<any>()
 
     const datos = async () => {
 
-        findChat(id1, id2).then(response => {
+        findChat(id1, id2,).then(response => {
             setMessages(response.data)
         })
+
+        setChatid(await getChatId(id1, id2))
     }
 
     useEffect(() => {
         datos();
-        const receiveMessage = (message: Message) => {
+        const receiveMessage = () => {
             findChat(id1, id2).then(response => {
                 setMessages([...response.data])
             })
@@ -70,12 +75,11 @@ const Conversation: React.FC = () => {
         event.preventDefault();
         const currentDate = new Date();
         const currentDateFormatted = currentDate.toLocaleDateString('en-US');
-        const ChatId = await getChatId(id1, id2)
 
         const newMessage: Message = {
             contenido: message,
             id_usuario_env: id1,
-            id_conversacion: ChatId,
+            id_conversacion: chatid,
             fecha: currentDateFormatted
         }
         sendMessage(newMessage).then(response => {
@@ -84,6 +88,7 @@ const Conversation: React.FC = () => {
             }
         )
     }
+
     return (<>
             <IonPage>
                 <IonHeader>
@@ -96,7 +101,7 @@ const Conversation: React.FC = () => {
                         </IonAvatar>
                         <div>
                             <IonTitle>{name}</IonTitle>
-                            <h2 className="ml-5"> Online </h2>
+                            <h2 className="ml-5">{status === true ? "Online " : ""}</h2>
                         </div>
                     </IonToolbar>
                 </IonHeader>
@@ -126,7 +131,7 @@ const Conversation: React.FC = () => {
                                       onIonChange={(event) => setMessage(event.detail.value != undefined ? event.detail.value : "")}
                                       placeholder="message" class={"ion-text-center"}></IonInput>
                             <button slot={"end"} type={"submit"} onClick={(e) => handleSubmit(e)}>
-                                 <IonFabButton size={"small"} color={"danger"}>
+                                <IonFabButton size={"small"} color={"danger"}>
                                     <IonIcon icon={sendOutline}></IonIcon>
                                 </IonFabButton>
                             </button>

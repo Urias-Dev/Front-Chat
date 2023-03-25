@@ -1,13 +1,13 @@
 export interface LoginData {
     correo: string,
-    pass: string
+    pass: string,
 }
 
 export interface Message {
     id?: number;
     contenido: string;
     id_usuario_env: number;
-    id_conversacion: number;
+    id_conversacion: number ;
     fecha: string
 }
 

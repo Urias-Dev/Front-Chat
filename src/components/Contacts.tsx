@@ -12,18 +12,19 @@ import {findUser} from "../Api";
 import {getId} from "../interfaces" ;
 import {useHistory} from "react-router-dom";
 
-type StateType = {
-    name: string;
+type StateType =  {
+    name:  string;
     id1: number
-    id2: number;
+    id2: number ;
+      status :  boolean  ,
 }
 
-const Contacts: React.FC<getId> = (props) => {
+ const   Contacts :   React.FC<getId> = (props) => {
 
     let history = useHistory();
 
-    let [users, setUsers] = useState([])
-    let [results, setResults] = useState([])
+     let [users ,   setUsers] = useState([])
+    let [results, setResults] = useState(  [])
 
     const datos = async () => {
         const data = await findUser();
@@ -32,8 +33,9 @@ const Contacts: React.FC<getId> = (props) => {
     }
 
     useEffect(() => {
+
         datos()
-    }, []);
+    }, [results]);
 
     const handleChange = (ev: Event) => {
         let query = "";
@@ -42,10 +44,10 @@ const Contacts: React.FC<getId> = (props) => {
         setResults(users.filter((object: any) => object.nombre.toLowerCase().indexOf(query) > -1));
     }
 
-    const handleSubmit = (name: string, id2: number) => {
-        const state: StateType = {name: name, id1: props.id, id2: id2};
+    const handleSubmit = (name: string, id2:  number   ,  status  : boolean  )  =>  {
+        const state: StateType  = {name: name, id1: props.id, id2: id2  ,  status : status  };
         history.push({
-            pathname: '/chat/',
+            pathname:   '/chat/',
             state: state
         });
     }
@@ -60,7 +62,7 @@ const Contacts: React.FC<getId> = (props) => {
                     <IonList lines={"none"}>
                         {results.filter((user: any) => user.user_id !== props.id)
                             .map((objects: any) =>
-                                <IonItem onClick={() => handleSubmit(objects.nombre, objects.user_id)}
+                                <IonItem onClick={()  => handleSubmit(objects.nombre,  objects.user_id  ,    objects.status    )}
                                          key={objects.user_id}>
                                     <IonAvatar slot={"start"}>
                                         <img src={avatar} alt=""/>
@@ -69,8 +71,7 @@ const Contacts: React.FC<getId> = (props) => {
                                         <h2>{objects.nombre}</h2>
                                         <h3>{objects.apellido_p}</h3>
                                     </IonLabel>
-                                    <IonBadge slot={"end"} className={"rounded-full p-2"} color={"danger"}>
-                                        {objects.status === props.status ? "Online" : ""}
+                                    <IonBadge slot={"end"} className={"rounded-full p-2"} color={"danger"}>12
                                     </IonBadge>
                                 </IonItem>
                             )}

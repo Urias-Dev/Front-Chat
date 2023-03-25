@@ -27,17 +27,17 @@ import Conversation from "./components/Conversation";
 
 setupIonicReact();
 
-const App: React.FC = () => (
+const App = () => (
     <IonApp>
         <IonReactRouter>
             <IonRouterOutlet>
-                <Route exact path="/login" component={LogIn}>
+                <Route exact path="/login"  component={LogIn}>
                 </Route>
                 <Route exact path="/register" component={Register}>
                 </Route>
                 <Route exact path="/chat-online" component={Menu}>
                 </Route>
-                <Route exact path="/chat" component={Conversation}>
+                <Route exact path="/chat" component={Conversation }>
                 </Route>
                 <Route exact path="/">
                     <Redirect to="/login"/>

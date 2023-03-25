@@ -17,11 +17,11 @@ export const login = (data: LoginData) => {
     return API.post('/login', data)
 }
 
-export const finUserById = (id: number) => {
+export const finUserById = (id: number) =>  {
     return API.get('/findone_user/' + id)
 }
 
-export const updateUser = (user_id: number, data: RegisterData) => {
+export const updateUser = (user_id: number, data: RegisterData) =>  {
     return API.put('/update_user/' + user_id, data)
 }
 
@@ -31,9 +31,7 @@ export const sendMessage = async (messages: Message) => {
 
 export const getChatId = async (id1: number, id2: number) => {
     const query = await API.get('/findChat/' + id1 + '/' + id2)
-    const id = query.data.id_conversacion;
-    console.log(id)
-    return id
+    return query.data.id_conversacion;
 }
 
 export const findChat = async (id1: number, id2: number) => {

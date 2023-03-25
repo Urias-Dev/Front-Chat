@@ -78,7 +78,7 @@ const Profile: React.FC<getId> = (props) => {
                             </div>
                         </IonToolbar>
                     </div>
-                    <div className={"m-5"}>
+                    <div className={"m-6"}>
                         <form>
                             <IonItem lines={"none"}>
                                 <IonLabel position={"fixed"} className={"max-sm:text-center"}>Name:</IonLabel>
@@ -87,7 +87,7 @@ const Profile: React.FC<getId> = (props) => {
                                               ...data,
                                               nombre: event.detail.value != undefined ? event.detail.value : ""
                                           })}></IonInput>
-                                <IonIcon icon={createOutline}></IonIcon>
+                                <IonIcon className={"mr-10"} icon={createOutline}></IonIcon>
                             </IonItem>
                             <IonItem lines={"none"}>
                                 <IonLabel position={"fixed"} className={"max-sm:text-center"}>Last Name P:</IonLabel>
@@ -96,7 +96,7 @@ const Profile: React.FC<getId> = (props) => {
                                               ...data,
                                               apellido_p: event.detail.value != undefined ? event.detail.value : ""
                                           })}> </IonInput>
-                                <IonIcon icon={createOutline}></IonIcon>
+                                <IonIcon className={"mr-10"} icon={createOutline}></IonIcon>
                             </IonItem>
                             <IonItem lines={"none"}>
                                 <IonLabel position={"fixed"} className={"max-sm:text-center"}>Last Name M:</IonLabel>
@@ -105,7 +105,7 @@ const Profile: React.FC<getId> = (props) => {
                                               ...data,
                                               apellido_m: event.detail.value != undefined ? event.detail.value : ""
                                           })}></IonInput>
-                                <IonIcon icon={createOutline}></IonIcon>
+                                <IonIcon className={"mr-10"} icon={createOutline}></IonIcon>
                             </IonItem>
                             <IonItem lines={"none"}>
                                 <IonLabel position={"fixed"} className={"max-sm:text-center"}>Email:</IonLabel>
@@ -114,7 +114,7 @@ const Profile: React.FC<getId> = (props) => {
                                               ...data,
                                               correo: event.detail.value != undefined ? event.detail.value : ""
                                           })}></IonInput>
-                                <IonIcon icon={createOutline}></IonIcon>
+                                <IonIcon className={"mr-10"} icon={createOutline}></IonIcon>
                             </IonItem>
                         </form>
                         <div className={"flex justify-center mt-10"}>
