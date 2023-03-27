@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react' ;
+import React, {useEffect, useRef, useState} from 'react' ;
 import avatar from '../assets/img/avatar.png'
 import {io} from 'socket.io-client'
 import {
@@ -45,6 +45,7 @@ const Conversation: React.FC = () => {
     const [message, setMessage] = useState("")
     const [chatid, setChatid] = useState<any>()
 
+
     const datos = async () => {
 
         findChat(id1, id2,).then(response => {
@@ -70,6 +71,7 @@ const Conversation: React.FC = () => {
         }
 
     }, [])
+
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -120,6 +122,7 @@ const Conversation: React.FC = () => {
                                 </IonCol>
                             </IonRow>
                         ))}
+
                     </IonGrid>
                 </IonContent>
                 <IonFooter class={"ion-no-border"} color={"light"}>
